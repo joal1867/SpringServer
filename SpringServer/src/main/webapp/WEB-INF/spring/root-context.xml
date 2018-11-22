@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- 모든 곳에서 사용할 bean을 생성하는 파일 : 데이터베이스 접속정보(DataSource),데이터베이스 사용설정(MyBatis,Hibernate,트랜잭션설정등...) -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- 데이터베이스 연동 시 필수 -->
+	<!-- 데이터베이스 접속정보 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<!-- 데이터베이스 종류 : 오라클 -->
+		<property name="driverClassName" 
+			value="oracle.jdbc.driver.OracleDriver"/>
+		<!-- 데이터베이스 주소 -->
+		<!-- 본인의 컴퓨터면 @다음 localhost / 포트번호확인 - 기본1521 // SID는 orcl 또는 xe -->
+		<property name="url"
+			value="jdbc:oracle:thin:@10.211.55.3:1521:xe"/>
+		<!-- 아이디와 비밀번호 -->
+		<property name="username" value="system"  />
+		<property name="password" value="++++++"  />
+	</bean>
+
+
+	<!-- MyBatis 사용을 위한 설정 -->
+	<!-- MyBatis 환경 설정 객체 생성 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/mybatis/mybatis-config.xml"/>
+		<property name="mapperLocations" value="classpath:/mybatis/mappers/*.xml"/>
+	</bean>
+	<!-- SQL 실행 객체 생성 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"  destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+
+</beans>
