@@ -17,3 +17,4 @@ public class MemberDAO {
 				"member.login",member);	
 	}
 }
+     
