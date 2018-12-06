@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +7,21 @@
 <title>메인화면</title>
 </head>
 <body>
+	<!-- 삽입화면으로의 이동을 위한 태그추가 -->
+	<input type="button" value="삽입" id="insertbtn" />
+	
 	<div id="listdisplay"></div>
+	<div id="detaildisplay"></div>
 </body>
 <!-- jQuery링크 추가 -->
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js></script>
 <script>
+	//삽입화면으로의 이동을 위한 스크립트 추가 
+	document.getElementById("insertbtn").addEventListener("click", function(){
+		location.href = "memo/insert"
+	})
+
+	
 	//ajax로 memo/memolist요청을 수행해주는 함수 
 	function memolist(){
 		$.ajax({
@@ -60,6 +70,26 @@
 		})
 	}
 	
+	//데이터를 삭제하는 메소드
+	function del(num){
+		$.ajax({
+			url:'memo/memodelete',
+			data:{"num":num},
+			dataType:'json',
+			type:'POST',
+			success:function(map){
+				if(map.result == 'success'){
+					//데이터 다시 출력
+					memolist()
+					document.getElementById(
+							"detaildisplay").innerHTML = ""
+					
+				}else{
+					alert("삭제 실패")
+				}
+			}
+		});
+	}	
 	
 	//jquery에서 문서가 시작 되자마자 수행 
 	$(function(){
